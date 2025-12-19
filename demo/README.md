@@ -103,6 +103,7 @@ Create at least 3 users: Alice, Bob, and Charlie.
     { "id": 3 }
   ]
 }
+
 ```
 ---
 
@@ -124,6 +125,8 @@ Create at least 3 users: Alice, Bob, and Charlie.
   "description": "Dinner"
 }
 ```
+
+---
 
 ###4️⃣ Get Simplified Balances
 **GET** `/balances/1`
