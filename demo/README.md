@@ -73,19 +73,19 @@ mvn spring-boot:run
 The application will start on: http://localhost:8081
 
 ---
+# Testing the Application (Using Postman)
 
-## Testing the Application (Using Postman)
-1️⃣ Create Users
-POST /users
+### 1️⃣ Create Users 
+**POST** `/users`
 
-JSON
-
-JSON
-
-{
-  "name": "Alice",
-  "email": "alice@gmail.com"
+**JSON**
+```json
+{ 
+  "name": "Alice", 
+  "email": "alice@gmail.com" 
 }
+
+
 Create at least 3 users: Alice, Bob, and Charlie.
 
 2️⃣ Create a Group
