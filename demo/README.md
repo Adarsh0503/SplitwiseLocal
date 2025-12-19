@@ -1,11 +1,9 @@
 # Expense Sharing Application (Splitwise-like Backend)
 
 ## Overview
-This project is a backend system for an expense-sharing application similar to Splitwise.
+This project is a backend system for an expense-sharing application similar to Splitwise. It allows users to create groups, add shared expenses, track balances, and generate simplified settlements.
 
-It allows users to create groups, add shared expenses, track balances, and generate simplified settlements.
-
-The focus of this project is **clean system design**, **correct business logic**, and **efficient balance simplification**, not UI or authentication.
+The focus of this project is on **clean system design**, **correct business logic**, and **balance simplification**, not UI or authentication.
 
 ---
 
@@ -17,17 +15,17 @@ The focus of this project is **clean system design**, **correct business logic**
   - Exact amount split
   - Percentage split
 - Track who owes whom
-- Generate simplified settlements with minimum transactions
+- Simplify balances to minimize transactions
 - Mark expenses as settled
 
 ---
 
 ## Tech Stack
-- Java 17  
-- Spring Boot  
-- Spring Data JPA (Hibernate)  
-- H2 In-Memory Database  
-- Maven  
+- Java 17
+- Spring Boot
+- Spring Data JPA (Hibernate)
+- H2 In-Memory Database
+- Maven
 - Postman (for API testing)
 
 ---
@@ -35,16 +33,16 @@ The focus of this project is **clean system design**, **correct business logic**
 ## High-Level Architecture
 - **Controller Layer** – REST APIs
 - **Service Layer** – Business logic (expense handling & balance simplification)
-- **Repository Layer** – Data access using JPA
+- **Repository Layer** – Database access using JPA
 - **Database** – H2 in-memory database
 
 ---
 
 ## Core Design
-- Expenses are stored per group
+- Expenses belong to a group
 - Each expense is split using Equal / Exact / Percentage logic
-- Net balance is calculated per user
-- Balances are simplified using a greedy settlement algorithm to minimize transactions
+- Net balances are calculated per user
+- Balances are simplified using a greedy settlement algorithm to reduce transactions
 
 ---
 
@@ -59,14 +57,116 @@ The focus of this project is **clean system design**, **correct business logic**
 
 ---
 
-## Setup & Installation
-
-### Prerequisites
-- Java 17 installed
-- Maven installed
-- Git installed
-
-### Clone the Repository
+## Clone the Repository
 ```bash
-git clone https://github.com/Adarsh0503/SplitwiseLocal.git
+git clone [https://github.com/Adarsh0503/SplitwiseLocal.git](https://github.com/Adarsh0503/SplitwiseLocal.git)
 cd SplitwiseLocal/demo
+
+Run the Application
+Bash
+
+Bash
+
+mvn spring-boot:run
+The application will start on: http://localhost:8081
+
+Testing the Application (Using Postman)
+1️⃣ Create Users
+POST /users
+
+JSON
+
+JSON
+
+{
+  "name": "Alice",
+  "email": "alice@gmail.com"
+}
+Create at least 3 users: Alice, Bob, and Charlie.
+
+2️⃣ Create a Group
+POST /groups
+
+JSON
+
+JSON
+
+{
+  "name": "Goa Trip",
+  "members": [
+    { "id": 1 },
+    { "id": 2 },
+    { "id": 3 }
+  ]
+}
+3️⃣ Add an Expense
+POST /expenses
+
+JSON
+
+JSON
+
+{
+  "groupId": 1,
+  "paidByUserId": 1,
+  "totalAmount": 300,
+  "splitType": "EQUAL",
+  "splits": {
+    "1": 0,
+    "2": 0,
+    "3": 0
+  },
+  "description": "Dinner"
+}
+4️⃣ Get Simplified Balances
+GET /balances/1
+
+Sample Response
+
+JSON
+
+JSON
+
+[
+  {
+    "fromUserId": 2,
+    "toUserId": 1,
+    "amount": 100
+  },
+  {
+    "fromUserId": 3,
+    "toUserId": 1,
+    "amount": 100
+  }
+]
+Interpretation
+Bob owes Alice ₹100
+
+Charlie owes Alice ₹100
+
+Database
+Uses H2 in-memory database
+
+Data resets automatically on application restart
+
+No external database setup required
+
+Future Enhancements
+Authentication & authorization
+
+Persistent database (MySQL/PostgreSQL)
+
+Activity logs & audit history
+
+Frontend integration
+
+Why This Approach Stands Out
+Clean layered architecture
+
+Accurate balance calculation
+
+Efficient balance simplification algorithm
+
+Easily extensible design
+
+Interview-ready backend system design
