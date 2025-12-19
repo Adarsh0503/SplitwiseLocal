@@ -86,9 +86,10 @@ The application will start on: http://localhost:8081
 }
 
 ```
----
+
 
 Create at least 3 users: Alice, Bob, and Charlie.
+---
 
 ### 2️⃣ Create a Group
 **POST** `/groups`
