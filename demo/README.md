@@ -1,10 +1,11 @@
 # Expense Sharing Application (Splitwise-like Backend)
 
 ## Overview
-This project is a backend system for an expense-sharing application similar to Splitwise.  
+This project is a backend system for an expense-sharing application similar to Splitwise.
+
 It allows users to create groups, add shared expenses, track balances, and generate simplified settlements.
 
-The focus is on **clean system design**, **correct business logic**, and **balance simplification**, not UI or authentication.
+The focus of this project is **clean system design**, **correct business logic**, and **efficient balance simplification**, not UI or authentication.
 
 ---
 
@@ -16,17 +17,17 @@ The focus is on **clean system design**, **correct business logic**, and **balan
   - Exact amount split
   - Percentage split
 - Track who owes whom
-- Simplify balances to minimize transactions
+- Generate simplified settlements with minimum transactions
 - Mark expenses as settled
 
 ---
 
 ## Tech Stack
-- Java 17
-- Spring Boot
-- Spring Data JPA (Hibernate)
-- H2 In-Memory Database
-- Maven
+- Java 17  
+- Spring Boot  
+- Spring Data JPA (Hibernate)  
+- H2 In-Memory Database  
+- Maven  
 - Postman (for API testing)
 
 ---
@@ -40,10 +41,10 @@ The focus is on **clean system design**, **correct business logic**, and **balan
 ---
 
 ## Core Design
-- Expenses belong to a group
+- Expenses are stored per group
 - Each expense is split using Equal / Exact / Percentage logic
-- Net balances are calculated per user
-- Balances are simplified using a greedy settlement algorithm to reduce transactions
+- Net balance is calculated per user
+- Balances are simplified using a greedy settlement algorithm to minimize transactions
 
 ---
 
@@ -58,13 +59,14 @@ The focus is on **clean system design**, **correct business logic**, and **balan
 
 ---
 
-## How to Run the Project
+## Setup & Installation
 
 ### Prerequisites
 - Java 17 installed
 - Maven installed
+- Git installed
 
-### Steps
+### Clone the Repository
 ```bash
-cd demo
-mvn spring-boot:run
+git clone https://github.com/Adarsh0503/SplitwiseLocal.git
+cd SplitwiseLocal/demo
