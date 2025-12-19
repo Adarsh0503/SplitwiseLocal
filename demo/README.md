@@ -128,13 +128,13 @@ Create at least 3 users: Alice, Bob, and Charlie.
 
 
 
-##Interpretation
+## Interpretation
 Bob owes Alice ₹100 
 Charlie owes Alice ₹100
 
 ---
 
-#Database
+# Database
 Uses H2 in-memory database
 
 Data resets automatically on application restart
@@ -143,7 +143,7 @@ No external database setup required
 
 ---
 
-#Future Enhancements
+# Future Enhancements
 Authentication & authorization
 
 Persistent database (MySQL/PostgreSQL)
