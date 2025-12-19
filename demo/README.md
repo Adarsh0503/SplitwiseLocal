@@ -89,7 +89,7 @@ The application will start on: http://localhost:8081
 
 
 Create at least 3 users: Alice, Bob, and Charlie.
----
+
 
 ### 2️⃣ Create a Group
 **POST** `/groups`
@@ -106,7 +106,6 @@ Create at least 3 users: Alice, Bob, and Charlie.
 }
 
 ```
----
 
 ###3️⃣ Add an Expense
 **POST** `/expenses`
@@ -127,20 +126,20 @@ Create at least 3 users: Alice, Bob, and Charlie.
 }
 ```
 
----
+
 
 ###4️⃣ Get Simplified Balances
 **GET** `/balances/1`
----
+
 
 
 ##Interpretation
-Bob owes Alice ₹100
-
+Bob owes Alice ₹100 
 Charlie owes Alice ₹100
 
 ---
-##Database
+
+#Database
 Uses H2 in-memory database
 
 Data resets automatically on application restart
@@ -149,7 +148,7 @@ No external database setup required
 
 ---
 
-##Future Enhancements
+#Future Enhancements
 Authentication & authorization
 
 Persistent database (MySQL/PostgreSQL)
