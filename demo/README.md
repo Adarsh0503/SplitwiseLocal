@@ -86,6 +86,7 @@ The application will start on: http://localhost:8081
 }
 
 ```
+---
 
 Create at least 3 users: Alice, Bob, and Charlie.
 
@@ -103,6 +104,7 @@ Create at least 3 users: Alice, Bob, and Charlie.
   ]
 }
 ```
+---
 
 ###3️⃣ Add an Expense
 **POST** `/expenses`
