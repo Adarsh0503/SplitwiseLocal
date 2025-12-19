@@ -59,7 +59,8 @@ The focus of this project is on **clean system design**, **correct business logi
 
 ## Clone the Repository
 ```bash
-git clone [https://github.com/Adarsh0503/SplitwiseLocal.git](https://github.com/Adarsh0503/SplitwiseLocal.git)
+git clone [https://github.com/Adarsh0503/SplitwiseLocal.git]
+(https://github.com/Adarsh0503/SplitwiseLocal.git)
 cd SplitwiseLocal/demo
 ```
 
@@ -84,12 +85,8 @@ The application will start on: http://localhost:8081
   "name": "Alice", 
   "email": "alice@gmail.com" 
 }
-
 ```
-
-
 Create at least 3 users: Alice, Bob, and Charlie.
-
 
 ### 2️⃣ Create a Group
 **POST** `/groups`
@@ -104,12 +101,10 @@ Create at least 3 users: Alice, Bob, and Charlie.
     { "id": 3 }
   ]
 }
-
 ```
 
-###3️⃣ Add an Expense
+### 3️⃣ Add an Expense
 **POST** `/expenses`
-
 **JSON**
 ```json
 {
@@ -128,7 +123,7 @@ Create at least 3 users: Alice, Bob, and Charlie.
 
 
 
-###4️⃣ Get Simplified Balances
+### 4️⃣ Get Simplified Balances
 **GET** `/balances/1`
 
 
