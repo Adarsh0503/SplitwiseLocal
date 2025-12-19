@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "groups")   // ✅ avoid SQL keyword "group"
 public class Group {
 
     @Id
@@ -15,7 +16,6 @@ public class Group {
     @ManyToMany
     private List<User> members;
 
-    // constructors
     public Group() {}
 
     public Group(String name, List<User> members) {
@@ -23,5 +23,29 @@ public class Group {
         this.members = members;
     }
 
-    // getters & setters
+    // ===== Getters & Setters =====
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<User> getMembers() {
+        return members;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setMembers(List<User> members) {
+        this.members = members;
+    }
 }

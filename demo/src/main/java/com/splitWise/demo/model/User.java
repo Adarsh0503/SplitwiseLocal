@@ -1,14 +1,15 @@
 package com.splitWise.demo.model;
 
 import jakarta.persistence.*;
-import java.util.UUID;
+// import java.util.UUID;
 
 @Entity
+@Table(name = "users")   // ✅ IMPORTANT
 public class User {
 
     @Id
     @GeneratedValue
-    private UUID id;
+    private Long id;
 
     private String name;
     private String email;
@@ -22,11 +23,11 @@ public class User {
     }
 
     // Getters & Setters
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -41,4 +42,8 @@ public class User {
     public String getEmail() {
         return email;
     }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
 }
