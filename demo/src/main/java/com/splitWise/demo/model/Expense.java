@@ -15,18 +15,23 @@ public class Expense {
 
     private BigDecimal totalAmount;
 
+    @Enumerated(EnumType.STRING)
+    private SplitType splitType;   // ✅ ADD HERE
+
     @ManyToOne
+    @JoinColumn(name = "paid_by_user_id")
     private User paidBy;
 
     @ManyToOne
+    @JoinColumn(name = "group_id")
     private Group group;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "expense", cascade = CascadeType.ALL)
     private List<Split> splits;
 
     private boolean settled;
 
     public Expense() {}
 
-    // getters & setters
+    // getters and setters
 }

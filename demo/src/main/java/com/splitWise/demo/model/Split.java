@@ -13,12 +13,16 @@ public class Split {
     @ManyToOne
     private User user;
 
+    @ManyToOne
+    private Expense expense;   // 👈 ADD THIS
+
     private BigDecimal amount;
 
     public Split() {}
 
-    public Split(User user, BigDecimal amount) {
+    public Split(User user, Expense expense, BigDecimal amount) {
         this.user = user;
+        this.expense = expense;
         this.amount = amount;
     }
 
