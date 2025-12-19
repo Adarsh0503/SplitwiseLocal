@@ -61,16 +61,20 @@ The focus of this project is on **clean system design**, **correct business logi
 ```bash
 git clone [https://github.com/Adarsh0503/SplitwiseLocal.git](https://github.com/Adarsh0503/SplitwiseLocal.git)
 cd SplitwiseLocal/demo
+```
 
-Run the Application
-Bash
+---
 
-Bash
-
+## Run the Application
+```bash
 mvn spring-boot:run
+```
+
 The application will start on: http://localhost:8081
 
-Testing the Application (Using Postman)
+---
+
+## Testing the Application (Using Postman)
 1️⃣ Create Users
 POST /users
 
@@ -159,6 +163,8 @@ Persistent database (MySQL/PostgreSQL)
 Activity logs & audit history
 
 Frontend integration
+
+---
 
 Why This Approach Stands Out
 Clean layered architecture
