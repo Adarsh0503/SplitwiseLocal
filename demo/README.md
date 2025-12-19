@@ -85,15 +85,14 @@ The application will start on: http://localhost:8081
   "email": "alice@gmail.com" 
 }
 
+```
 
 Create at least 3 users: Alice, Bob, and Charlie.
 
-2️⃣ Create a Group
-POST /groups
-
-JSON
-
-JSON
+### 2️⃣ Create a Group
+**POST** `/groups`
+**JSON**
+```json
 
 {
   "name": "Goa Trip",
@@ -103,13 +102,13 @@ JSON
     { "id": 3 }
   ]
 }
-3️⃣ Add an Expense
-POST /expenses
+```
 
-JSON
+###3️⃣ Add an Expense
+**POST** `/expenses`
 
-JSON
-
+**JSON**
+```json
 {
   "groupId": 1,
   "paidByUserId": 1,
@@ -122,40 +121,29 @@ JSON
   },
   "description": "Dinner"
 }
-4️⃣ Get Simplified Balances
-GET /balances/1
+```
 
-Sample Response
+###4️⃣ Get Simplified Balances
+**GET** `/balances/1`
+---
 
-JSON
 
-JSON
-
-[
-  {
-    "fromUserId": 2,
-    "toUserId": 1,
-    "amount": 100
-  },
-  {
-    "fromUserId": 3,
-    "toUserId": 1,
-    "amount": 100
-  }
-]
-Interpretation
+##Interpretation
 Bob owes Alice ₹100
 
 Charlie owes Alice ₹100
 
-Database
+---
+##Database
 Uses H2 in-memory database
 
 Data resets automatically on application restart
 
 No external database setup required
 
-Future Enhancements
+---
+
+##Future Enhancements
 Authentication & authorization
 
 Persistent database (MySQL/PostgreSQL)
@@ -166,13 +154,3 @@ Frontend integration
 
 ---
 
-Why This Approach Stands Out
-Clean layered architecture
-
-Accurate balance calculation
-
-Efficient balance simplification algorithm
-
-Easily extensible design
-
-Interview-ready backend system design
