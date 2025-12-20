@@ -91,6 +91,8 @@ The application will start on: http://localhost:8081
 }
 ```
 Create at least 3 users: Alice, Bob, and Charlie.
+<img width="926" height="502" alt="image" src="https://github.com/user-attachments/assets/e03ac76d-7d18-415f-bb47-38e9c3c4f27a" />
+
 
 ### 2️⃣ Create a Group
 **POST** `/groups`
@@ -107,6 +109,9 @@ Create at least 3 users: Alice, Bob, and Charlie.
   ]
 }
 ```
+
+<img width="927" height="638" alt="image" src="https://github.com/user-attachments/assets/684ca635-3172-4588-8041-7c505ace8921" />
+
 
 ### 3️⃣ Add an Expense
 **POST** `/expenses`
@@ -126,6 +131,7 @@ Create at least 3 users: Alice, Bob, and Charlie.
   "description": "Dinner"
 }
 ```
+<img width="936" height="600" alt="image" src="https://github.com/user-attachments/assets/faadb045-48b5-4076-af9f-b9c147551571" />
 
 
 
