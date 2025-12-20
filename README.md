@@ -1,4 +1,5 @@
 # Expense Sharing Application (Splitwise-like Backend)
+<img width="655" height="731" alt="image" src="https://github.com/user-attachments/assets/472dd6dc-91f6-4a9a-bc6e-22797a81a9b3" />
 
 ## Overview
 This project is a backend system for an expense-sharing application similar to Splitwise. It allows users to create groups, add shared expenses, track balances, and generate simplified settlements.
@@ -35,6 +36,9 @@ The focus of this project is on **clean system design**, **correct business logi
 - **Service Layer** – Business logic (expense handling & balance simplification)
 - **Repository Layer** – Database access using JPA
 - **Database** – H2 in-memory database
+
+
+<img width="1324" height="494" alt="image" src="https://github.com/user-attachments/assets/63cf8cf8-0677-44cf-9b2c-c43c2d44c201" />
 
 ---
 
@@ -87,6 +91,8 @@ The application will start on: http://localhost:8081
 }
 ```
 Create at least 3 users: Alice, Bob, and Charlie.
+<img width="926" height="502" alt="image" src="https://github.com/user-attachments/assets/e03ac76d-7d18-415f-bb47-38e9c3c4f27a" />
+
 
 ### 2️⃣ Create a Group
 **POST** `/groups`
@@ -103,6 +109,9 @@ Create at least 3 users: Alice, Bob, and Charlie.
   ]
 }
 ```
+
+<img width="927" height="638" alt="image" src="https://github.com/user-attachments/assets/684ca635-3172-4588-8041-7c505ace8921" />
+
 
 ### 3️⃣ Add an Expense
 **POST** `/expenses`
@@ -122,11 +131,14 @@ Create at least 3 users: Alice, Bob, and Charlie.
   "description": "Dinner"
 }
 ```
+<img width="936" height="600" alt="image" src="https://github.com/user-attachments/assets/faadb045-48b5-4076-af9f-b9c147551571" />
 
 
 
 ### 4️⃣ Get Simplified Balances
 **GET** `/balances/1`
+
+<img width="939" height="616" alt="image" src="https://github.com/user-attachments/assets/a3fef7b4-53ef-4ec7-97f4-92c5d7a1683b" />
 
 
 ---
