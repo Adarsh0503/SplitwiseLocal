@@ -37,6 +37,9 @@ The focus of this project is on **clean system design**, **correct business logi
 - **Repository Layer** – Database access using JPA
 - **Database** – H2 in-memory database
 
+
+<img width="1324" height="494" alt="image" src="https://github.com/user-attachments/assets/63cf8cf8-0677-44cf-9b2c-c43c2d44c201" />
+
 ---
 
 ## Core Design
