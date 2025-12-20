@@ -1,4 +1,5 @@
 # Expense Sharing Application (Splitwise-like Backend)
+<img width="655" height="731" alt="image" src="https://github.com/user-attachments/assets/472dd6dc-91f6-4a9a-bc6e-22797a81a9b3" />
 
 ## Overview
 This project is a backend system for an expense-sharing application similar to Splitwise. It allows users to create groups, add shared expenses, track balances, and generate simplified settlements.
