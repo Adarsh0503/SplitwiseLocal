@@ -132,6 +132,8 @@ Create at least 3 users: Alice, Bob, and Charlie.
 ### 4️⃣ Get Simplified Balances
 **GET** `/balances/1`
 
+<img width="939" height="616" alt="image" src="https://github.com/user-attachments/assets/a3fef7b4-53ef-4ec7-97f4-92c5d7a1683b" />
+
 
 ---
 
