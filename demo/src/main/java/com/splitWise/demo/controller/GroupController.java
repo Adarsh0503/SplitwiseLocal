@@ -1,7 +1,10 @@
 package com.splitWise.demo.controller;
 
+import com.splitWise.demo.exception.ResourceNotFoundException;
 import com.splitWise.demo.model.Group;
 import com.splitWise.demo.repository.GroupRepository;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,14 +20,16 @@ public class GroupController {
     }
 
     @PostMapping
-    public Group createGroup(@RequestBody Group group) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Group createGroup(@Valid @RequestBody Group group) {
         return groupRepository.save(group);
     }
 
     @GetMapping("/{groupId}")
     public Group getGroup(@PathVariable Long groupId) {
         return groupRepository.findById(groupId)
-                .orElseThrow(() -> new RuntimeException("Group not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Group not found with id: " + groupId));
     }
 
     @GetMapping

@@ -14,9 +14,7 @@ public class Payment {
         this.amount = amount;
     }
 
-    // getters
     public Long getFromUserId() { return fromUserId; }
-public Long getToUserId() { return toUserId; }
-public BigDecimal getAmount() { return amount; }
-
+    public Long getToUserId() { return toUserId; }
+    public BigDecimal getAmount() { return amount; }
 }

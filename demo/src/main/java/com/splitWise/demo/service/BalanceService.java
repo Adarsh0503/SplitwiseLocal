@@ -1,96 +1,92 @@
 package com.splitWise.demo.service;
 
 import com.splitWise.demo.dto.Payment;
+import com.splitWise.demo.exception.ResourceNotFoundException;
 import com.splitWise.demo.model.Expense;
 import com.splitWise.demo.model.Split;
 import com.splitWise.demo.repository.ExpenseRepository;
+import com.splitWise.demo.repository.GroupRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 @Service
 public class BalanceService {
 
     private final ExpenseRepository expenseRepository;
+    private final GroupRepository groupRepository;
 
-    public BalanceService(ExpenseRepository expenseRepository) {
+    public BalanceService(ExpenseRepository expenseRepository, GroupRepository groupRepository) {
         this.expenseRepository = expenseRepository;
+        this.groupRepository = groupRepository;
     }
 
     public List<Payment> simplifyGroupBalances(Long groupId) {
+        groupRepository.findById(groupId)
+                .orElseThrow(() -> new ResourceNotFoundException("Group not found with id: " + groupId));
 
-        List<Expense> expenses =
-                expenseRepository.findByGroupIdAndSettledFalse(groupId);
-    
+        List<Expense> expenses = expenseRepository.findByGroupIdAndSettledFalse(groupId);
+
+        // Step 1: Compute net balance per user
+        // Positive = owed money, Negative = owes money
         Map<Long, BigDecimal> netBalance = new HashMap<>();
-    
-        // 1️⃣ Calculate net balances
+
         for (Expense expense : expenses) {
-            Long paidBy = expense.getPaidBy().getId();
+            Long paidById = expense.getPaidBy().getId();
             BigDecimal total = expense.getTotalAmount();
-    
-            netBalance.put(
-                    paidBy,
-                    netBalance.getOrDefault(paidBy, BigDecimal.ZERO).add(total)
-            );
-    
+
+            // Payer is owed the full amount
+            netBalance.merge(paidById, total, BigDecimal::add);
+
+            // Each split participant owes their share
             for (Split split : expense.getSplits()) {
                 Long userId = split.getUser().getId();
-                netBalance.put(
-                        userId,
-                        netBalance.getOrDefault(userId, BigDecimal.ZERO)
-                                .subtract(split.getAmount())
-                );
+                netBalance.merge(userId, split.getAmount().negate(), BigDecimal::add);
             }
         }
-    
-        // 2️⃣ Priority queues
-        PriorityQueue<Map.Entry<Long, BigDecimal>> creditors =
-                new PriorityQueue<>((a, b) -> b.getValue().compareTo(a.getValue()));
-    
-        PriorityQueue<Map.Entry<Long, BigDecimal>> debtors =
-                new PriorityQueue<>((a, b) -> a.getValue().compareTo(b.getValue()));
-    
+
+        // Step 2: Separate into creditors (positive) and debtors (negative)
+        // Max-heap for creditors (highest credit first)
+        PriorityQueue<long[]> creditors = new PriorityQueue<>(
+                (a, b) -> Long.compare(b[1], a[1]));
+        // Min-heap for debtors (most negative first)
+        PriorityQueue<long[]> debtors = new PriorityQueue<>(
+                Comparator.comparingLong(a -> a[1]));
+
         for (Map.Entry<Long, BigDecimal> entry : netBalance.entrySet()) {
-            if (entry.getValue().compareTo(BigDecimal.ZERO) > 0) {
-                creditors.add(entry);
-            } else if (entry.getValue().compareTo(BigDecimal.ZERO) < 0) {
-                debtors.add(entry);
+            // Convert to cents to avoid floating point issues in comparisons
+            long cents = entry.getValue().multiply(BigDecimal.valueOf(100))
+                    .setScale(0, RoundingMode.HALF_UP).longValue();
+            if (cents > 0) {
+                creditors.offer(new long[]{entry.getKey(), cents});
+            } else if (cents < 0) {
+                debtors.offer(new long[]{entry.getKey(), cents});
             }
         }
-    
-        // 3️⃣ Simplify payments
+
+        // Step 3: Greedy settlement — always match largest creditor with largest debtor
         List<Payment> payments = new ArrayList<>();
-    
+
         while (!creditors.isEmpty() && !debtors.isEmpty()) {
-    
-            Map.Entry<Long, BigDecimal> creditor = creditors.poll();
-            Map.Entry<Long, BigDecimal> debtor = debtors.poll();
-    
-            BigDecimal amount =
-                    creditor.getValue().min(debtor.getValue().abs());
-    
-            payments.add(
-                    new Payment(
-                            debtor.getKey(),
-                            creditor.getKey(),
-                            amount
-                    )
-            );
-    
-            creditor.setValue(creditor.getValue().subtract(amount));
-            debtor.setValue(debtor.getValue().add(amount));
-    
-            if (creditor.getValue().compareTo(BigDecimal.ZERO) > 0) {
-                creditors.add(creditor);
-            }
-            if (debtor.getValue().compareTo(BigDecimal.ZERO) < 0) {
-                debtors.add(debtor);
-            }
+            long[] creditor = creditors.poll();
+            long[] debtor = debtors.poll();
+
+            long settle = Math.min(creditor[1], -debtor[1]);
+
+            BigDecimal amount = BigDecimal.valueOf(settle)
+                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+
+            payments.add(new Payment(debtor[0], creditor[0], amount));
+
+            creditor[1] -= settle;
+            debtor[1] += settle;
+
+            if (creditor[1] > 0) creditors.offer(creditor);
+            if (debtor[1] < 0) debtors.offer(debtor);
         }
-    
+
         return payments;
     }
-    
 }

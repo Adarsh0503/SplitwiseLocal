@@ -1,9 +1,8 @@
 package com.splitWise.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "splits")
@@ -20,7 +19,6 @@ public class Split {
     @ManyToOne
     @JoinColumn(name = "expense_id", nullable = false)
     @JsonBackReference
-
     private Expense expense;
 
     @Column(nullable = false)
@@ -34,33 +32,11 @@ public class Split {
         this.amount = amount;
     }
 
-    // ===== Getters & Setters =====
-
-    public Long getId() {
-        return id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public Expense getExpense() {
-        return expense;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public void setExpense(Expense expense) {
-        this.expense = expense;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
+    public Long getId() { return id; }
+    public User getUser() { return user; }
+    public Expense getExpense() { return expense; }
+    public BigDecimal getAmount() { return amount; }
+    public void setUser(User user) { this.user = user; }
+    public void setExpense(Expense expense) { this.expense = expense; }
+    public void setAmount(BigDecimal amount) { this.amount = amount; }
 }
