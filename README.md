@@ -1,165 +1,201 @@
-# Expense Sharing Application (Splitwise-like Backend)
-<img width="655" height="731" alt="image" src="https://github.com/user-attachments/assets/472dd6dc-91f6-4a9a-bc6e-22797a81a9b3" />
+# Expense Sharing Backend (Splitwise-like)
 
-## Overview
-This project is a backend system for an expense-sharing application similar to Splitwise. It allows users to create groups, add shared expenses, track balances, and generate simplified settlements.
+A production-ready backend system for expense sharing, similar to Splitwise. Built with **Java 17**, **Spring Boot**, and deployed via **Docker + Jenkins CI/CD**.
 
-The focus of this project is on **clean system design**, **correct business logic**, and **balance simplification**, not UI or authentication.
+![Architecture](https://github.com/user-attachments/assets/63cf8cf8-0677-44cf-9b2c-c43c2d44c201)
 
 ---
 
 ## Features
+
 - Create users and groups
-- Add shared expenses within a group
-- Supported split types:
-  - Equal split
-  - Exact amount split
-  - Percentage split
-- Track who owes whom
-- Simplify balances to minimize transactions
-- Mark expenses as settled
+- Add shared expenses with three split strategies:
+  - **Equal** — split evenly among all members
+  - **Exact** — specify exact amount per user
+  - **Percentage** — split by percentage share
+- Track who owes whom across a group
+- **Greedy balance simplification** — minimizes the number of transactions needed to settle a group
+- Mark individual expenses as settled
 
 ---
 
 ## Tech Stack
-- Java 17
-- Spring Boot
-- Spring Data JPA (Hibernate)
-- H2 In-Memory Database
-- Maven
-- Postman (for API testing)
+
+| Layer | Technology |
+|---|---|
+| Language | Java 17 |
+| Framework | Spring Boot 3.2 |
+| ORM | Spring Data JPA / Hibernate |
+| Database | H2 In-Memory |
+| Build | Maven |
+| Containerization | Docker (multi-stage build) |
+| CI/CD | Jenkins |
+| Testing | JUnit 5 + Mockito |
 
 ---
 
-## High-Level Architecture
-- **Controller Layer** – REST APIs
-- **Service Layer** – Business logic (expense handling & balance simplification)
-- **Repository Layer** – Database access using JPA
-- **Database** – H2 in-memory database
+## Architecture
 
-
-<img width="1324" height="494" alt="image" src="https://github.com/user-attachments/assets/63cf8cf8-0677-44cf-9b2c-c43c2d44c201" />
-
----
-
-## Core Design
-- Expenses belong to a group
-- Each expense is split using Equal / Exact / Percentage logic
-- Net balances are calculated per user
-- Balances are simplified using a greedy settlement algorithm to reduce transactions
-
----
-
-## API Endpoints (Sample)
-
-| Method | Endpoint | Description |
-|------|---------|-------------|
-| POST | `/users` | Create a user |
-| POST | `/groups` | Create a group |
-| POST | `/expenses` | Add an expense |
-| GET  | `/balances/{groupId}` | Get simplified balances |
-
----
-
-## Clone the Repository
-```bash
-git clone [https://github.com/Adarsh0503/SplitwiseLocal.git]
-
-cd SplitwiseLocal/demo
+```
+Controller Layer  →  REST API endpoints
+Service Layer     →  Business logic, split calculation, balance simplification
+Repository Layer  →  JPA database access
+Database          →  H2 in-memory (auto-reset on restart)
 ```
 
 ---
 
-## Run the Application
+## API Reference
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/users` | Create a user |
+| GET | `/users` | List all users |
+| POST | `/groups` | Create a group |
+| GET | `/groups/{groupId}` | Get group by ID |
+| POST | `/expenses` | Add an expense |
+| GET | `/expenses/group/{groupId}` | List expenses in a group |
+| PATCH | `/expenses/{id}/settle` | Mark expense as settled |
+| GET | `/balances/{groupId}` | Get simplified settlement payments |
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Java 17
+- Maven 3.x
+
+### Run Locally
 ```bash
+git clone https://github.com/Adarsh0503/SplitwiseLocal.git
+cd SplitwiseLocal/demo
 mvn spring-boot:run
 ```
 
-The application will start on: http://localhost:8081
+App runs on: **http://localhost:8081**
+H2 Console: **http://localhost:8081/h2-console**
+
+### Run with Docker
+```bash
+docker build -t splitwise-backend .
+docker run -p 8081:8081 splitwise-backend
+```
+
+### Run with Docker Compose
+```bash
+docker-compose up
+```
 
 ---
-# Testing the Application (Using Postman)
 
-### 1️⃣ Create Users 
+## Testing the API (Postman)
+
+### 1. Create Users
 **POST** `/users`
-
-**JSON**
 ```json
-{ 
-  "name": "Alice", 
-  "email": "alice@gmail.com" 
-}
+{ "name": "Alice", "email": "alice@gmail.com" }
 ```
-Create at least 3 users: Alice, Bob, and Charlie.
-<img width="926" height="502" alt="image" src="https://github.com/user-attachments/assets/e03ac76d-7d18-415f-bb47-38e9c3c4f27a" />
+Repeat for Bob and Charlie.
 
+![Create User](https://github.com/user-attachments/assets/e03ac76d-7d18-415f-bb47-38e9c3c4f27a)
 
-### 2️⃣ Create a Group
+---
+
+### 2. Create a Group
 **POST** `/groups`
-
-**JSON**
 ```json
-
 {
   "name": "Goa Trip",
-  "members": [
-    { "id": 1 },
-    { "id": 2 },
-    { "id": 3 }
-  ]
+  "members": [{ "id": 1 }, { "id": 2 }, { "id": 3 }]
 }
 ```
 
-<img width="927" height="638" alt="image" src="https://github.com/user-attachments/assets/684ca635-3172-4588-8041-7c505ace8921" />
+![Create Group](https://github.com/user-attachments/assets/684ca635-3172-4588-8041-7c505ace8921)
 
+---
 
-### 3️⃣ Add an Expense
+### 3. Add an Expense
 **POST** `/expenses`
-
-**JSON**
 ```json
 {
   "groupId": 1,
   "paidByUserId": 1,
   "totalAmount": 300,
   "splitType": "EQUAL",
-  "splits": {
-    "1": 0,
-    "2": 0,
-    "3": 0
-  },
+  "splits": { "1": 0, "2": 0, "3": 0 },
   "description": "Dinner"
 }
 ```
-<img width="936" height="600" alt="image" src="https://github.com/user-attachments/assets/faadb045-48b5-4076-af9f-b9c147551571" />
 
+![Add Expense](https://github.com/user-attachments/assets/faadb045-48b5-4076-af9f-b9c147551571)
 
+---
 
-### 4️⃣ Get Simplified Balances
+### 4. Get Simplified Balances
 **GET** `/balances/1`
 
-<img width="939" height="616" alt="image" src="https://github.com/user-attachments/assets/a3fef7b4-53ef-4ec7-97f4-92c5d7a1683b" />
+Returns the minimum set of payments needed to settle the group:
+```json
+[
+  { "fromUserId": 2, "toUserId": 1, "amount": 100.00 },
+  { "fromUserId": 3, "toUserId": 1, "amount": 100.00 }
+]
+```
 
-
----
-
-# Database
-Uses H2 in-memory database
-
-Data resets automatically on application restart
-
-No external database setup required
+![Balances](https://github.com/user-attachments/assets/a3fef7b4-53ef-4ec7-97f4-92c5d7a1683b)
 
 ---
 
-# Future Enhancements
-Authentication & authorization
+### 5. Settle an Expense
+**PATCH** `/expenses/1/settle`
 
-Persistent database (MySQL/PostgreSQL)
-
-Activity logs & audit history
-
-Frontend integration
+Returns the expense with `"settled": true`. Settled expenses are excluded from future balance calculations.
 
 ---
 
+## Design Highlights
+
+### Balance Simplification Algorithm
+Uses a **greedy approach with two priority queues** — a max-heap for creditors and a min-heap for debtors. Always matches the largest creditor with the largest debtor, minimizing total transactions. Runs in **O(n log n)**.
+
+### Split Validation
+- `EXACT` splits must sum exactly to the total amount
+- `PERCENTAGE` splits must sum to 100
+- The payer must be a member of the group
+
+### Error Handling
+All errors return a consistent JSON structure:
+```json
+{
+  "timestamp": "2025-01-01T10:00:00",
+  "status": 404,
+  "error": "Not Found",
+  "message": "Group not found with id: 5"
+}
+```
+
+---
+
+## CI/CD Pipeline (Jenkins)
+
+The `Jenkinsfile` defines the following stages:
+
+```
+Checkout → Build → Test → Code Quality → Package → Docker Build → Docker Push → Deploy
+```
+
+---
+
+## Future Enhancements
+
+- Authentication & authorization (JWT/OAuth2)
+- Persistent database (PostgreSQL)
+- Activity logs & audit history
+- Frontend integration
+
+---
+
+## Author
+
+**Adarsh Gaurav** — [GitHub](https://github.com/adarsh0503) · [LinkedIn](https://www.linkedin.com/in/adarsh-gaurav-3595b6219/)
