@@ -110,7 +110,7 @@
 pipeline {
 agent any
 
-```
+
 environment {
     APP_NAME   = 'splitwise-backend'
     IMAGE_NAME = "adarsh0503/${APP_NAME}"
@@ -188,6 +188,6 @@ post {
         cleanWs()
     }
 }
-```
+
 
 }
