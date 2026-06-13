@@ -1,109 +1,88 @@
 pipeline {
-    agent any
+agent any
 
-    environment {
-        APP_NAME    = 'splitwise-backend'
-        IMAGE_NAME  = "adarsh0503/${APP_NAME}"
-        IMAGE_TAG   = "${BUILD_NUMBER}"
-    }
+```
+environment {
+    APP_NAME    = 'splitwise-backend'
+    IMAGE_NAME  = "adarsh0503/${APP_NAME}"
+    IMAGE_TAG   = "${BUILD_NUMBER}"
+}
 
-    tools {
-        maven 'Maven 3.9'
-        jdk   'JDK 17'
-    }
+tools {
+    maven 'Maven 3.9'
+    jdk   'JDK 21'
+}
 
-    stages {
+stages {
 
-        stage('Checkout') {
-            steps {
-                echo '📥 Checking out source code...'
-                checkout scm
-            }
+    stage('Checkout') {
+        steps {
+            echo '📥 Checking out source code...'
+            checkout scm
         }
+    }
 
-        stage('Build') {
-            steps {
-                echo '🔨 Building application...'
+    stage('Build') {
+        steps {
+            echo '🔨 Building application...'
+            dir('demo') {
                 sh 'mvn clean compile -q'
             }
         }
+    }
 
-        stage('Test') {
-            steps {
-                echo '🧪 Running unit tests...'
+    stage('Test') {
+        steps {
+            echo '🧪 Running unit tests...'
+            dir('demo') {
                 sh 'mvn test'
             }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
+        }
+        post {
+            always {
+                junit 'demo/target/surefire-reports/*.xml'
             }
         }
+    }
 
-        stage('Code Quality Check') {
-            steps {
-                echo '🔍 Checking for compilation warnings...'
+    stage('Code Quality Check') {
+        steps {
+            echo '🔍 Checking for compilation warnings...'
+            dir('demo') {
                 sh 'mvn verify -DskipTests -q'
             }
         }
-
-        stage('Package') {
-            steps {
-                echo '📦 Packaging JAR...'
-                sh 'mvn package -DskipTests -q'
-                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
-            }
-        }
-
-        stage('Docker Build') {
-            steps {
-                echo "🐳 Building Docker image: ${IMAGE_NAME}:${IMAGE_TAG}"
-                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} -t ${IMAGE_NAME}:latest ."
-            }
-        }
-
-        stage('Docker Push') {
-            steps {
-                echo '🚀 Pushing image to Docker Hub...'
-                withCredentials([usernamePassword(
-                    credentialsId: 'dockerhub-credentials',
-                    usernameVariable: 'DOCKER_USER',
-                    passwordVariable: 'DOCKER_PASS'
-                )]) {
-                    sh '''
-                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                        docker push ${IMAGE_NAME}:${IMAGE_TAG}
-                        docker push ${IMAGE_NAME}:latest
-                    '''
-                }
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo '🌐 Deploying application...'
-                sh '''
-                    docker-compose down --remove-orphans || true
-                    docker-compose up -d
-                    echo "✅ Application deployed on port 8081"
-                '''
-            }
-        }
     }
 
-    post {
-        success {
-            echo "✅ Pipeline SUCCESS — Build #${BUILD_NUMBER} deployed"
-        }
-        failure {
-            echo "❌ Pipeline FAILED — Build #${BUILD_NUMBER}"
-        }
-        always {
-            sh 'docker logout || true'
-            cleanWs()
+    stage('Package') {
+        steps {
+            echo '📦 Packaging JAR...'
+            dir('demo') {
+                sh 'mvn package -DskipTests -q'
+            }
+
+            archiveArtifacts artifacts: 'demo/target/*.jar', fingerprint: true
         }
     }
 }
+
+post {
+    success {
+        echo "✅ Pipeline SUCCESS — Build #${BUILD_NUMBER}"
+    }
+
+    failure {
+        echo "❌ Pipeline FAILED — Build #${BUILD_NUMBER}"
+    }
+
+    always {
+        cleanWs()
+    }
+}
+```
+
+}
+
 
 
 // // For WINDOWS
